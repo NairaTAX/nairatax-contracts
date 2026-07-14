@@ -155,6 +155,12 @@ stellar contract invoke --id <CONTRACT_ID> --network testnet -- \
 
 MIT — see [LICENSE](LICENSE).
 
+## More
+
+- [CHANGELOG.md](CHANGELOG.md) — notable changes, by version.
+- [CONTRIBUTING.md](CONTRIBUTING.md) — dev workflow and code style.
+- [SECURITY.md](SECURITY.md) — how to report a vulnerability.
+
 ## NairaTax organization
 
 This repo is one of several in the NairaTax organization. If a change here touches the `Attestation` schema, call it out so `nairatax-engine` and `nairatax-web` can be updated to match.
