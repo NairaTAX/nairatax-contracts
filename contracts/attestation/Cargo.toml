@@ -1,0 +1,21 @@
+[package]
+name = "nairatax-attestation"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Soroban contract that anchors NairaTax report hashes on-chain for later verification."
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = "27.0.0"
+
+[dev-dependencies]
+soroban-sdk = { version = "27.0.0", features = ["testutils"] }
+
+[features]
+testutils = ["soroban-sdk/testutils"]
