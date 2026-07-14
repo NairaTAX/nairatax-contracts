@@ -1,10 +1,12 @@
 #![no_std]
 
 mod errors;
+mod events;
 mod storage;
 mod types;
 
 use errors::Error;
+use events::AttestationSubmitted;
 use storage::DataKey;
 use types::Attestation;
 
@@ -51,13 +53,22 @@ impl AttestationContract {
             return Err(Error::AttestationExists);
         }
 
+        let timestamp = env.ledger().timestamp();
         let attestation = Attestation {
+            report_hash: report_hash.clone(),
+            account: account.clone(),
+            period: period.clone(),
+            timestamp,
+        };
+        env.storage().persistent().set(&key, &attestation);
+
+        AttestationSubmitted {
             report_hash,
             account,
             period,
-            timestamp: env.ledger().timestamp(),
-        };
-        env.storage().persistent().set(&key, &attestation);
+            timestamp,
+        }
+        .publish(&env);
 
         Ok(())
     }
