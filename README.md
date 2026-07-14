@@ -107,15 +107,15 @@ pub struct Attestation {
 
 ## Building and testing
 
-Requires the Rust stable toolchain with the `wasm32v1-none` target (pinned in `rust-toolchain.toml`).
+Requires the Rust stable toolchain with the `wasm32v1-none` target (pinned in `rust-toolchain.toml`); `rustup` installs both automatically.
 
 ```bash
-# run unit tests
-cargo test
-
-# build the wasm contract
-cargo build --target wasm32v1-none --release
+make test    # cargo test
+make check   # fmt-check + clippy + test — what CI runs
+make build   # optimized wasm via scripts/build.sh
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 
 ## Why this matters for NairaTax
 
