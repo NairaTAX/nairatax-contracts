@@ -5,3 +5,4 @@ Cargo.lock.bak
 .soroban/
 .stellar/
 .DS_Store
+test_snapshots/
