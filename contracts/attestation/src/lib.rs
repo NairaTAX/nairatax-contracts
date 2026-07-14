@@ -61,4 +61,11 @@ impl AttestationContract {
 
         Ok(())
     }
+
+    /// Read-only lookup; callable by anyone, no authentication required.
+    pub fn get_attestation(env: Env, report_hash: BytesN<32>) -> Option<Attestation> {
+        env.storage()
+            .persistent()
+            .get(&DataKey::Attestation(report_hash))
+    }
 }
