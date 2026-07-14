@@ -117,6 +117,33 @@ make build   # optimized wasm via scripts/build.sh
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 
+## Deploying
+
+Requires the [Stellar CLI](https://developers.stellar.org/docs/tools/cli) and a funded identity added via `stellar keys add`.
+
+```bash
+SOROBAN_ACCOUNT=<your-identity> scripts/deploy.sh testnet
+```
+
+`scripts/deploy.sh` builds nothing itself — run `make build` (or `scripts/build.sh`) first so `target/wasm32v1-none/release/nairatax_attestation.wasm` exists.
+
+Once deployed, initialize the admin and submit an attestation via the CLI directly:
+
+```bash
+stellar contract invoke --id <CONTRACT_ID> --network testnet -- \
+  init --admin <ADMIN_ADDRESS>
+
+stellar contract invoke --id <CONTRACT_ID> --network testnet -- \
+  submit_attestation \
+  --submitter <ADMIN_ADDRESS> \
+  --report_hash <32_BYTE_HEX_HASH> \
+  --account <STELLAR_ACCOUNT> \
+  --period 2026
+
+stellar contract invoke --id <CONTRACT_ID> --network testnet -- \
+  get_attestation --report_hash <32_BYTE_HEX_HASH>
+```
+
 ## Why this matters for NairaTax
 
 - **For filers** — a report that can be shown to match what was actually computed, not just what's in a downloaded file.
