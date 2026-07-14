@@ -44,3 +44,18 @@ fn submit_attestation_stores_record_for_admin() {
     assert_eq!(stored.account, account);
     assert_eq!(stored.period, period);
 }
+
+#[test]
+fn submit_attestation_rejects_non_admin() {
+    let (env, client, admin) = setup();
+    env.mock_all_auths();
+    client.init(&admin);
+
+    let attacker = Address::generate(&env);
+    let report_hash = BytesN::from_array(&env, &[2u8; 32]);
+    let account = Address::generate(&env);
+    let period = Symbol::new(&env, "2026");
+
+    let result = client.try_submit_attestation(&attacker, &report_hash, &account, &period);
+    assert_eq!(result, Err(Ok(Error::NotAuthorized)));
+}
