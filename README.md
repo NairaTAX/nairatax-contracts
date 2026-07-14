@@ -63,6 +63,11 @@ graph TB
 nairatax-contracts/
 ├── Cargo.toml                        # workspace manifest
 ├── rust-toolchain.toml               # pins stable + wasm32v1-none target
+├── Makefile                          # build/test/fmt/clippy targets
+├── .github/workflows/ci.yml          # build, test, fmt, clippy, wasm artifact
+├── scripts/
+│   ├── build.sh                      # optimized wasm build
+│   └── deploy.sh                     # Testnet/Mainnet deploy
 └── contracts/
     └── attestation/
         ├── Cargo.toml
