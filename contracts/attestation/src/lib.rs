@@ -12,7 +12,12 @@ use events::AttestationSubmitted;
 use storage::DataKey;
 use types::Attestation;
 
-use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, Symbol};
+use soroban_sdk::{contract, contractimpl, contractmeta, Address, BytesN, Env, Symbol};
+
+contractmeta!(
+    key = "Description",
+    val = "Anchors NairaTax report hashes on-chain for later verification"
+);
 
 #[contract]
 pub struct AttestationContract;
