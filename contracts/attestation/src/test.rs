@@ -59,3 +59,18 @@ fn submit_attestation_rejects_non_admin() {
     let result = client.try_submit_attestation(&attacker, &report_hash, &account, &period);
     assert_eq!(result, Err(Ok(Error::NotAuthorized)));
 }
+
+#[test]
+fn submit_attestation_rejects_duplicate_hash() {
+    let (env, client, admin) = setup();
+    env.mock_all_auths();
+    client.init(&admin);
+
+    let report_hash = BytesN::from_array(&env, &[3u8; 32]);
+    let account = Address::generate(&env);
+    let period = Symbol::new(&env, "2026");
+
+    client.submit_attestation(&admin, &report_hash, &account, &period);
+    let result = client.try_submit_attestation(&admin, &report_hash, &account, &period);
+    assert_eq!(result, Err(Ok(Error::AttestationExists)));
+}
