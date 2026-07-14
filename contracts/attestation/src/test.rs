@@ -87,3 +87,10 @@ fn submit_attestation_before_init_fails() {
     let result = client.try_submit_attestation(&admin, &report_hash, &account, &period);
     assert_eq!(result, Err(Ok(Error::NotInitialized)));
 }
+
+#[test]
+fn get_attestation_returns_none_for_unknown_hash() {
+    let (env, client, _admin) = setup();
+    let report_hash = BytesN::from_array(&env, &[5u8; 32]);
+    assert_eq!(client.get_attestation(&report_hash), None);
+}
