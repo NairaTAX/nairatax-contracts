@@ -1,4 +1,11 @@
 #![no_std]
+//! Soroban contract that anchors NairaTax report hashes on-chain.
+//!
+//! `nairatax-engine` computes a tax report and its hash off-chain; this
+//! contract's only job is to record that hash so it can later be
+//! independently verified by a filer, an accountant, or the NRS. It never
+//! stores report contents, PII, or funds — only a hash, an account, a
+//! period, and a timestamp.
 
 mod errors;
 mod events;
