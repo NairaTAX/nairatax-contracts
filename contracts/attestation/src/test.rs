@@ -74,3 +74,16 @@ fn submit_attestation_rejects_duplicate_hash() {
     let result = client.try_submit_attestation(&admin, &report_hash, &account, &period);
     assert_eq!(result, Err(Ok(Error::AttestationExists)));
 }
+
+#[test]
+fn submit_attestation_before_init_fails() {
+    let (env, client, admin) = setup();
+    env.mock_all_auths();
+
+    let report_hash = BytesN::from_array(&env, &[4u8; 32]);
+    let account = Address::generate(&env);
+    let period = Symbol::new(&env, "2026");
+
+    let result = client.try_submit_attestation(&admin, &report_hash, &account, &period);
+    assert_eq!(result, Err(Ok(Error::NotInitialized)));
+}
