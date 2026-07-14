@@ -27,7 +27,35 @@ Everything downstream of "does this hash match" — the tax calculation, the rul
 
 ## Status
 
-Implemented and unit-tested. Not yet deployed to Testnet or Mainnet, and not yet wired up as a `nairatax-engine` client.
+Implemented and unit-tested. Not yet deployed to Testnet or Mainnet, and not yet wired up as a `nairatax-engine` client. See [Roadmap](#roadmap) for what's next.
+
+## Roadmap
+
+### Phase 1 — Contract implementation — done
+
+- [x] `init` / `submit_attestation` / `get_attestation`
+- [x] Admin-only auth on `submit_attestation`, append-only duplicate-hash rejection
+- [x] `AttestationSubmitted` event, topic-indexed by `report_hash`
+- [x] Full unit test coverage (success, auth, duplicate, pre-init, event, and independence cases)
+- [x] CI: build/test, fmt-check, clippy, wasm build artifact
+- [x] Dev tooling: `Makefile`, `rustfmt.toml`, `scripts/build.sh`, `scripts/deploy.sh`
+- [x] Docs: README, CONTRIBUTING, CHANGELOG, SECURITY, LICENSE
+
+### Phase 2 — Testnet deployment
+
+- [ ] Deploy via `scripts/deploy.sh testnet`
+- [ ] Record the deployed contract ID here and in `nairatax-engine` / `nairatax-web` config
+- [ ] Manually verify `init` → `submit_attestation` → `get_attestation` end-to-end on Testnet
+
+### Phase 3 — Integration
+
+- [ ] `nairatax-engine` calls `submit_attestation` after report generation
+- [ ] `nairatax-web` surfaces a "verified on-chain" indicator using `get_attestation`
+
+### Phase 4 — Mainnet
+
+- [ ] Mainnet deployment
+- [ ] First tagged release (`CHANGELOG` `Unreleased` → `v0.1.0`)
 
 ## Architecture
 
