@@ -1,5 +1,7 @@
 #![no_std]
 
+mod errors;
+
 use soroban_sdk::{contract, contractimpl, Env};
 
 #[contract]
