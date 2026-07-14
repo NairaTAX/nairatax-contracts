@@ -1,7 +1,10 @@
 #![cfg(test)]
 
 use super::{AttestationContract, AttestationContractClient, Error};
-use soroban_sdk::{testutils::Address as _, Address, BytesN, Env, Symbol};
+use soroban_sdk::{
+    testutils::{Address as _, Events as _},
+    Address, BytesN, Env, Symbol,
+};
 
 fn setup<'a>() -> (Env, AttestationContractClient<'a>, Address) {
     let env = Env::default();
@@ -93,4 +96,20 @@ fn get_attestation_returns_none_for_unknown_hash() {
     let (env, client, _admin) = setup();
     let report_hash = BytesN::from_array(&env, &[5u8; 32]);
     assert_eq!(client.get_attestation(&report_hash), None);
+}
+
+#[test]
+fn submit_attestation_publishes_event() {
+    let (env, client, admin) = setup();
+    env.mock_all_auths();
+    client.init(&admin);
+
+    let report_hash = BytesN::from_array(&env, &[6u8; 32]);
+    let account = Address::generate(&env);
+    let period = Symbol::new(&env, "2026");
+
+    client.submit_attestation(&admin, &report_hash, &account, &period);
+
+    let contract_events = env.events().all().filter_by_contract(&client.address);
+    assert_eq!(contract_events.events().len(), 1);
 }
