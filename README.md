@@ -168,7 +168,7 @@ MIT — see [LICENSE](LICENSE).
 
 ## NairaTax organization
 
-This repo is one of several in the NairaTax organization. If a change here touches the `Attestation` schema, call it out so `nairatax-engine` and `nairatax-web` can be updated to match.
+This repo is one of several in the NairaTax organization.
 
 | Repo | Role |
 |---|---|
@@ -178,3 +178,28 @@ This repo is one of several in the NairaTax organization. If a change here touch
 | `nairatax-rules` | Jurisdiction rule packs as auditable data (e.g. `nigeria-nta-2025`) |
 | **`nairatax-contracts`** *(this repo)* | On-chain attestation layer for report hashes |
 | `nairatax-docs` | Methodology, filing guides, developer + user docs |
+
+### Data flow
+
+```
+Stellar Horizon/RPC ──▶ nairatax-engine ──▶ report + report_hash
+                                                   │
+                              nairatax-rules ──────┤ (jurisdiction rules)
+                                                   │
+                                    ┌──────────────┴──────────────┐
+                                    ▼                              ▼
+                            nairatax-web                 nairatax-contracts
+                          (renders report)         (anchors report_hash on-chain)
+```
+
+### Shared contracts (must stay in sync across repos)
+
+1. **Report hash format** — defined by `nairatax-engine`'s report serialization. Whatever canonical form `nairatax-engine` hashes must match exactly what `submit_attestation` receives here, or verification is meaningless.
+2. **`Attestation` schema** — defined in [`contracts/attestation/src/types.rs`](contracts/attestation/src/types.rs). If it changes, update `nairatax-web` client code that reads `get_attestation` results.
+3. **Environment variables / config keys** — a deployed contract ID and a service account authorised to call `submit_attestation`, mirrored between `nairatax-engine`'s config and this repo's deployment.
+
+### Conventions for AI agents
+
+- Treat this section as the source of truth for **cross-repo** contracts; each repo's own README covers repo-local conventions.
+- If a change here touches a shared contract above, call it out explicitly so `nairatax-engine` and `nairatax-web` can be updated to match — don't assume the other repo's maintainer will notice on their own.
+- Don't scaffold speculative cross-repo integration code (e.g. a `nairatax-engine` client for `submit_attestation`) without confirming the target repo is ready for it.
