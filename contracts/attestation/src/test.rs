@@ -113,3 +113,21 @@ fn submit_attestation_publishes_event() {
     let contract_events = env.events().all().filter_by_contract(&client.address);
     assert_eq!(contract_events.events().len(), 1);
 }
+
+#[test]
+fn multiple_attestations_are_independent() {
+    let (env, client, admin) = setup();
+    env.mock_all_auths();
+    client.init(&admin);
+
+    let hash_a = BytesN::from_array(&env, &[7u8; 32]);
+    let hash_b = BytesN::from_array(&env, &[8u8; 32]);
+    let account = Address::generate(&env);
+
+    client.submit_attestation(&admin, &hash_a, &account, &Symbol::new(&env, "2026"));
+    client.submit_attestation(&admin, &hash_b, &account, &Symbol::new(&env, "2027"));
+
+    let attestation_a = client.get_attestation(&hash_a).unwrap();
+    let attestation_b = client.get_attestation(&hash_b).unwrap();
+    assert_ne!(attestation_a.period, attestation_b.period);
+}
