@@ -1,0 +1,7 @@
+/target
+**/target
+Cargo.lock.bak
+*.wasm
+.soroban/
+.stellar/
+.DS_Store
